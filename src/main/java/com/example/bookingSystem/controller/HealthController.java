@@ -1,4 +1,4 @@
-package com.example.bookingSystem.controller.health;
+package com.example.bookingSystem.controller;
 
 import org.springframework.web.bind.annotation.*;
 
