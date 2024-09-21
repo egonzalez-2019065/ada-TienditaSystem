@@ -15,6 +15,9 @@ public interface BookingService {
     // Devolver a los usuarios creados
     List<Booking> getAllBookings();
 
+    // Devolver un servicio por id
+    Booking getBookingById(int id);
+
     // Eliminar a un usuario
-    Booking deleteBooking(int id);
+    void deleteBooking(int id);
 }
