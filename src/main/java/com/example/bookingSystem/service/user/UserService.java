@@ -1,7 +1,8 @@
 package com.example.bookingSystem.service.user;
 
-import com.example.bookingSystem.models.User;
+import com.example.bookingSystem.models.user.User;
 import java.util.List;
+import java.util.Optional;
 
 public interface UserService {
 
@@ -14,8 +15,11 @@ public interface UserService {
     // Devolver a los usuarios creados
     List<User> getAllUsuarios();
 
+    // Buscar a un usuario por su id
+    Optional<User>  getUser(int id);
+
     // Eliminar a un usuario
-    User deleteUser(int id);
+    void deleteUser(int id);
 
 
 }

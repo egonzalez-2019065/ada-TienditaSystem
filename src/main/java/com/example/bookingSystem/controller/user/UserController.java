@@ -1,6 +1,6 @@
 package com.example.bookingSystem.controller.user;
 
-import com.example.bookingSystem.models.User;
+import com.example.bookingSystem.models.user.User;
 import com.example.bookingSystem.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +11,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/users/")
 public class UserController {
-    private final UserService userService;
-
-    public UserController(@Autowired UserService userService) {
-        this.userService = userService;
-    }
 
     @PostMapping
     public ResponseEntity<User> createUser() {

@@ -1,53 +1,45 @@
 package com.example.bookingSystem.service.booking;
 
-import com.example.bookingSystem.models.Booking;
+import com.example.bookingSystem.models.booking.Booking;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.example.bookingSystem.repository.booking.BookingRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
-public class BookingServiceMap implements BookingService {
+public class BookingServiceMap {
 
-    private final BookingService bookingService;
+    private final BookingRepository bookingRepository;
 
     @Autowired
-    public BookingServiceMap(BookingService bookingService) {
-        this.bookingService = bookingService;
+    public BookingServiceMap(BookingRepository bookingRepository) {
+        this.bookingRepository = bookingRepository;
     }
 
-    @Override
     public Booking saveBooking(Booking booking) {
-        Booking bookingSaved = bookingService.saveBooking(booking);
-        return bookingSaved;
+        return bookingRepository.save(booking);
     }
 
-    @Override
-    public Booking updateBooking(int id, Booking booking) {
-        Booking bookingToUpdated = bookingService.getBookingById(id);
-        if (bookingToUpdated == null) {
-             bookingService.saveBooking(booking);
+    public Booking updateBooking(String id, Booking booking) {
+        if (bookingRepository.existsById(id)) {
+            return bookingRepository.save(booking);
         }
-        return booking;
+        return null;
     }
 
-    @Override
     public List<Booking> getAllBookings() {
-        List<Booking> bookings = bookingService.getAllBookings();
-        return bookings;
+        return bookingRepository.findAll();
     }
 
-    @Override
-    public Booking getBookingById(int id) {
-        Booking bookingFound = bookingService.getBookingById(id);
-        return bookingFound;
+    public Optional<Booking> getBookingById(String id) {
+        return bookingRepository.findById(id);
     }
 
-    @Override
-    public void deleteBooking(int id) {
-        Booking bookingToDelete = bookingService.getBookingById(id);
-        if (bookingToDelete == null) {
-            bookingService.deleteBooking(id);
+    public void deleteBooking(String id) {
+        if (bookingRepository.existsById(id)) {
+            bookingRepository.deleteById(id);
         }
     }
 }
