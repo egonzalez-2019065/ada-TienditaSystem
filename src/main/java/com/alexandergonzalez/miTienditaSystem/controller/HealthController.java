@@ -1,4 +1,4 @@
-package com.example.bookingSystem.controller;
+package com.alexandergonzalez.miTienditaSystem.controller;
 
 import org.springframework.web.bind.annotation.*;
 
