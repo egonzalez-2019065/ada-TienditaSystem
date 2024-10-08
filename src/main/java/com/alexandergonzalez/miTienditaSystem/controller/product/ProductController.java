@@ -1,71 +1,64 @@
 package com.alexandergonzalez.miTienditaSystem.controller.product;
 
-import com.alexandergonzalez.miTienditaSystem.models.product.Product;
-import com.alexandergonzalez.miTienditaSystem.models.product.ProductDto;
-import com.alexandergonzalez.miTienditaSystem.service.product.ProductServiceMap;
+import com.alexandergonzalez.miTienditaSystem.dto.ProductDto;
+import com.alexandergonzalez.miTienditaSystem.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 
 @RestController
 @RequestMapping("/v1/product/")
 public class ProductController {
 
-    private final ProductServiceMap productServiceMap;
+    private final ProductService productService;
 
     @Autowired
-    public ProductController(ProductServiceMap productServiceMap) {
-        this.productServiceMap = productServiceMap;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
 
     @PostMapping
-    public ResponseEntity<Product> createUser(@RequestBody ProductDto productDto) {
-        Product product = new Product(productDto);
-        Product savedProduct = productServiceMap.saveProduct(product);
-        URI createdProductURI = URI.create("/v1/product/" + savedProduct.getId());
-        return ResponseEntity.created(createdProductURI).build();
+    public ResponseEntity<ProductDto> createUser(@RequestBody ProductDto productDto) {
+        ProductDto productoDtoToSave = productService.saveProduct(productDto);
+
+        return ResponseEntity.ok(productoDtoToSave);
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>>getAllBookings() {
-        List<Product> products = productServiceMap.getAllProductos();
+    public ResponseEntity<List<ProductDto>>getAllBookings() {
+        List<ProductDto> products = productService.getAllProductos();
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Product> findById(@PathVariable String id) {
-        Optional <Product> productFound = productServiceMap.getProductByID(id);
-        if (productFound.isPresent()) {
-            return ResponseEntity.ok(productFound.get());
+    public ResponseEntity<ProductDto> findById(@PathVariable String id) {
+        ProductDto productFound = productService.getProductByID(id);
+        if (productFound != null) {
+            return ResponseEntity.ok(productFound);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Product> updateBooking(@PathVariable String id, @RequestBody ProductDto productDto) {
-        Optional <Product> product = productServiceMap.getProductByID(id);
-        if (product.isPresent()) {
-            Product userToUpdated = product.get();
-            userToUpdated.update(productDto);
-            productServiceMap.saveProduct(userToUpdated);
-            return ResponseEntity.ok(userToUpdated);
+    public ResponseEntity<ProductDto> updateProduct(@PathVariable String id, @RequestBody ProductDto productDto) {
+        ProductDto product = productService.getProductByID(id);
+        if (product != null) {
+            ProductDto updatedProduct = productService.updateProducto(id, productDto);
+            return ResponseEntity.ok(updatedProduct);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteBooking(@PathVariable String id) {
-        Optional <Product> product = productServiceMap.getProductByID(id);
-        if (product.isPresent()) {
-            productServiceMap.deleteProduct(id);
+        ProductDto product = productService.getProductByID(id);
+        if (product != null) {
+            productService.deleteProduct(id);
             return ResponseEntity.ok().build();
         }
        return new ResponseEntity<>(HttpStatus.NOT_FOUND);

@@ -1,6 +1,6 @@
-package com.alexandergonzalez.miTienditaSystem.repository.product;
+package com.alexandergonzalez.miTienditaSystem.repository;
 
-import com.alexandergonzalez.miTienditaSystem.models.product.Product;
+import com.alexandergonzalez.miTienditaSystem.entity.Product;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 
