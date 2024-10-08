@@ -1,0 +1,36 @@
+package com.alexandergonzalez.miTienditaSystem.dto.auth;
+
+import com.alexandergonzalez.miTienditaSystem.util.Role;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.Id;
+
+import java.time.LocalDateTime;
+
+@Data
+public class RegisterDto {
+    @Id
+    private String id;
+
+    private String name;
+    private String lastname;
+    private String username;
+    private String password;
+    @JsonIgnore
+    private Role role;
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    public RegisterDto() {
+        this.createdAt = LocalDateTime.now();
+    }
+
+    public RegisterDto(String id, String name, String lastname, String username) {
+        this.id = id;
+        this.name = name;
+        this.lastname = lastname;
+        this.username = username;
+    }
+}

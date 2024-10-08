@@ -1,6 +1,5 @@
-package com.alexandergonzalez.miTienditaSystem.controller.user;
+package com.alexandergonzalez.miTienditaSystem.controller;
 
-import com.alexandergonzalez.miTienditaSystem.entity.User;
 import com.alexandergonzalez.miTienditaSystem.dto.UserDto;
 import com.alexandergonzalez.miTienditaSystem.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,9 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.net.URI;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/v1/user/")
