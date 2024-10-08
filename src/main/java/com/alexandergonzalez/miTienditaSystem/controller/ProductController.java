@@ -1,4 +1,4 @@
-package com.alexandergonzalez.miTienditaSystem.controller.product;
+package com.alexandergonzalez.miTienditaSystem.controller;
 
 import com.alexandergonzalez.miTienditaSystem.dto.ProductDto;
 import com.alexandergonzalez.miTienditaSystem.service.ProductService;
