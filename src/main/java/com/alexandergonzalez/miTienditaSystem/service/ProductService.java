@@ -69,10 +69,13 @@ public class ProductService {
     }
 
     // Declaración de un método que eliminará un producto existente en la base de datos
-    public void deleteProduct(String id) {
+    public ProductDto deleteProduct(String id) {
         Product product = productRepository.findById(id).orElse(null);
         if (product != null) {
-            productRepository.deleteById(id);
+            ProductDto productDtoDeleted = toDto(product);
+            productRepository.deleteById(id); // Eliminamos el producto
+            return productDtoDeleted;
         }
+        return null;
     }
 }

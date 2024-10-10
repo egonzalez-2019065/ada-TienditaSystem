@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/v1/user/")
@@ -37,34 +39,43 @@ public class UserController {
 
     // Endpoint que devuelve un usuario por su id
     @GetMapping("{id}")
-    public ResponseEntity<UserDto> findById(@PathVariable String id) {
+    public ResponseEntity<Object> findById(@PathVariable String id) {
+        Map<String, Object> response = new HashMap<>();
         UserDto userFound = userService.findUserById(id);
         if(userFound != null){
-            return ResponseEntity.ok(userFound);
+            response.put("Usuario encontrado:", userFound);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        response.put("message", "El usuario que está buscando aún no existe");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     // Endpoint que actualiza un usuario por su id
     @PutMapping("{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable String id, @RequestBody UserDto userDto) {
+    public ResponseEntity<Object> updateUser(@PathVariable String id, @RequestBody UserDto userDto) {
+        Map<String, Object> response = new HashMap<>();
         UserDto userFound = userService.findUserById(id);
         if(userFound != null){
             UserDto updatedUser = userService.updateUser(id, userDto);
-            return ResponseEntity.ok(updatedUser);
+            response.put("Usuario actualizado:", updatedUser);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        response.put("message", "El usuario que está buscando aún no existe");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     // Endpoint que elimina un usuario existente por su id
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
-      UserDto userFound = userService.findUserById(id);
+    public ResponseEntity<Object> deleteUser(@PathVariable String id) {
+        Map<String, Object> response = new HashMap<>();
+        UserDto userFound = userService.findUserById(id);
         if(userFound != null){
-            userService.deleteUser(id);
-            return ResponseEntity.ok().build();
+            UserDto Userdeleted = userService.deleteUser(id);
+            response.put("Usuario eliminado:", Userdeleted.getUsername());
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        response.put("message", "El usuario que está buscando aún no existe");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
 }
