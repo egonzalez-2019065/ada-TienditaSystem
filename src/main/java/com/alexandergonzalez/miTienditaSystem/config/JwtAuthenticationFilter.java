@@ -41,7 +41,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             System.out.println("Error obteniendo el username del token: " + e.getMessage());
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            String jsonResponse = String.format("{ \"message\": [\"%s\"]}", "El token no es válido");
+            String jsonResponse = String.format("{ \"message\": [\"%s\"]}", "El token no es válido o expiró, genere otro por favor");
             response.getWriter().write(jsonResponse);
             return;
         }

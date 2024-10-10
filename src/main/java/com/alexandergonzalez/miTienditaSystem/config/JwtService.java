@@ -1,5 +1,6 @@
 package com.alexandergonzalez.miTienditaSystem.config;
 
+import com.alexandergonzalez.miTienditaSystem.exception.InvalidJWT;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -46,7 +47,7 @@ public class JwtService {
             return username;
         } catch (Exception e) {
             System.out.println("Error extrayendo username del token: " + e.getMessage());
-            return null;
+            throw new InvalidJWT("Token inválido");
         }
     }
     public boolean isTokenValid(String token, UserDetails userDetails) {

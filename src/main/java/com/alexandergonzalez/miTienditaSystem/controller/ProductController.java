@@ -7,7 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RestController
@@ -23,10 +25,11 @@ public class ProductController {
 
 
     @PostMapping
-    public ResponseEntity<ProductDto> createUser(@RequestBody ProductDto productDto) {
+    public ResponseEntity<Object> createUser(@RequestBody ProductDto productDto) {
+        Map<String, Object> response = new HashMap<>();
         ProductDto productoDtoToSave = productService.saveProduct(productDto);
-
-        return ResponseEntity.ok(productoDtoToSave);
+        response.put("Producto creado:", productoDtoToSave);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
     @GetMapping
@@ -36,31 +39,43 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<ProductDto> findById(@PathVariable String id) {
+    public ResponseEntity<Object> findById(@PathVariable String id) {
+        Map<String, Object> response = new HashMap<>();
+
         ProductDto productFound = productService.getProductByID(id);
         if (productFound != null) {
-            return ResponseEntity.ok(productFound);
+            response.put("Producto encontrado:", productFound);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        response.put("message", "El producto aún no existe");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable String id, @RequestBody ProductDto productDto) {
+    public ResponseEntity<Object> updateProduct(@PathVariable String id, @RequestBody ProductDto productDto) {
+        Map<String, Object> response = new HashMap<>();
+
         ProductDto product = productService.getProductByID(id);
         if (product != null) {
             ProductDto updatedProduct = productService.updateProducto(id, productDto);
-            return ResponseEntity.ok(updatedProduct);
+            response.put("Producto actualizado:", updatedProduct);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        response.put("message", "El producto aún no existe");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Void> deleteBooking(@PathVariable String id) {
+    public ResponseEntity<Object> deleteProduct(@PathVariable String id) {
+        Map<String, Object> response = new HashMap<>();
+
         ProductDto product = productService.getProductByID(id);
         if (product != null) {
-            productService.deleteProduct(id);
-            return ResponseEntity.ok().build();
+            ProductDto productDeleted = productService.deleteProduct(id);
+            response.put("Producto eliminado:", productDeleted.getName());
+            return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-       return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        response.put("message", "El producto aún no existe");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 }

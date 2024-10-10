@@ -73,10 +73,14 @@ public class UserService {
     }
 
     // Declaración de un método que eliminará un usuario existente en la base de datos
-    public void deleteUser(String id){
-        if(userRepository.existsById(id)){
+    public UserDto deleteUser(String id){
+        User userFound = userRepository.findById(id).orElse(null);
+        if(userFound != null){
+            UserDto userDtoDeleted = toDto(userFound);
             userRepository.deleteById(id);
+            return userDtoDeleted;
         }
+        return null;
     }
 
 }
