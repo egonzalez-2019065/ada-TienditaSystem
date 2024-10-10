@@ -1,10 +1,15 @@
 package com.alexandergonzalez.miTienditaSystem.controller;
 
 import com.alexandergonzalez.miTienditaSystem.dto.UserDto;
+import com.alexandergonzalez.miTienditaSystem.entity.User;
 import com.alexandergonzalez.miTienditaSystem.service.UserService;
+import com.alexandergonzalez.miTienditaSystem.util.Role;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -24,6 +29,7 @@ public class UserController {
     }
 
     // Endpoint para poder crear un nuevo usuario
+    @RolesAllowed("ADMIN")
     @PostMapping
     public ResponseEntity<UserDto> createUser(@RequestBody UserDto userDto) {
         UserDto user = userService.saveUser(userDto);
@@ -54,11 +60,19 @@ public class UserController {
     @PutMapping("{id}")
     public ResponseEntity<Object> updateUser(@PathVariable String id, @RequestBody UserDto userDto) {
         Map<String, Object> response = new HashMap<>();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
         UserDto userFound = userService.findUserById(id);
         if(userFound != null){
-            UserDto updatedUser = userService.updateUser(id, userDto);
-            response.put("Usuario actualizado:", updatedUser);
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            if(currentPrincipalName.equals(userDto.getUsername())){
+                UserDto updatedUser = userService.updateUser(id, userDto);
+                response.put("Usuario actualizado:", updatedUser);
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }else{
+                response.put("message:","NO puedes actualizar otro usuario que no sea el tuyo");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            }
         }
         response.put("message", "El usuario que está buscando aún no existe");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
@@ -68,11 +82,18 @@ public class UserController {
     @DeleteMapping("{id}")
     public ResponseEntity<Object> deleteUser(@PathVariable String id) {
         Map<String, Object> response = new HashMap<>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
         UserDto userFound = userService.findUserById(id);
         if(userFound != null){
-            UserDto Userdeleted = userService.deleteUser(id);
-            response.put("Usuario eliminado:", Userdeleted.getUsername());
-            return ResponseEntity.status(HttpStatus.OK).body(response);
+            if(currentPrincipalName.equals(userFound.getUsername())){
+                UserDto Userdeleted = userService.deleteUser(id);
+                response.put("Usuario eliminado:", Userdeleted.getUsername());
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }else{
+                response.put("message:","NO puedes eliminar otro usuario que no sea el tuyo");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            }
         }
         response.put("message", "El usuario que está buscando aún no existe");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
