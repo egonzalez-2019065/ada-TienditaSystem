@@ -17,12 +17,15 @@ public class UserDto {
     private String username;
     private String password;
     private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
-    public UserDto(String id, String name, String lastname, String username, LocalDateTime createdAt) {
+
+    public UserDto(String id, String name, String lastname, String username, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.name = name;
         this.lastname = lastname;
         this.username = username;
         this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }
