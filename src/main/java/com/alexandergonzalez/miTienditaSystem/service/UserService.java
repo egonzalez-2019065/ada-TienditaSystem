@@ -5,9 +5,11 @@ import com.alexandergonzalez.miTienditaSystem.entity.User;
 import com.alexandergonzalez.miTienditaSystem.repository.UserRepository;
 import com.alexandergonzalez.miTienditaSystem.util.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,7 +29,8 @@ public class UserService {
             user.getName(),
             user.getLastname(),
             user.getUsername(),
-            user.getCreatedAt()
+            user.getCreatedAt(),
+            user.getUpdatedAt()
         );
     }
 
@@ -50,11 +53,13 @@ public class UserService {
             userFound.setName(userDto.getName());
             userFound.setLastname(userDto.getLastname());
             userFound.setUsername(userDto.getUsername());
+            userFound.setUpdatedAt(LocalDateTime.now());
             userRepository.save(userFound);
             return this.toDto(userFound);
         }
         return null;
     }
+
 
     // Declaración de un método que devolverá la información de un solo usuario existente en la base de datos
     public UserDto findUserById(String id){

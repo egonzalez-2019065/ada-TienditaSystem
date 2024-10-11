@@ -65,7 +65,7 @@ public class UserController {
         String currentPrincipalName = authentication.getName();
         UserDto userFound = userService.findUserById(id);
         if(userFound != null){
-            if(currentPrincipalName.equals(userDto.getUsername())){
+            if(currentPrincipalName.equals(userFound.getUsername())){
                 UserDto updatedUser = userService.updateUser(id, userDto);
                 response.put("Usuario actualizado:", updatedUser);
                 return ResponseEntity.status(HttpStatus.OK).body(response);
@@ -77,6 +77,7 @@ public class UserController {
         response.put("message", "El usuario que está buscando aún no existe");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
+
 
     // Endpoint que elimina un usuario existente por su id
     @DeleteMapping("{id}")
@@ -98,5 +99,4 @@ public class UserController {
         response.put("message", "El usuario que está buscando aún no existe");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
-
 }
