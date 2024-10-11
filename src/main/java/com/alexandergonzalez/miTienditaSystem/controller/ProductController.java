@@ -1,10 +1,15 @@
 package com.alexandergonzalez.miTienditaSystem.controller;
 
 import com.alexandergonzalez.miTienditaSystem.dto.ProductDto;
+import com.alexandergonzalez.miTienditaSystem.entity.User;
 import com.alexandergonzalez.miTienditaSystem.service.ProductService;
+import com.alexandergonzalez.miTienditaSystem.service.UserService;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -17,15 +22,19 @@ import java.util.Map;
 public class ProductController {
 
     private final ProductService productService;
+    private final UserService userService;
 
     @Autowired
-    public ProductController(ProductService productService) {
+    public ProductController(ProductService productService, UserService userService) {
         this.productService = productService;
+        this.userService = userService;
     }
 
-
+    @RolesAllowed("ADMIN")
     @PostMapping
-    public ResponseEntity<Object> createUser(@RequestBody ProductDto productDto) {
+    public ResponseEntity<Object> createProduct(@RequestBody ProductDto productDto) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
         Map<String, Object> response = new HashMap<>();
         ProductDto productoDtoToSave = productService.saveProduct(productDto);
         response.put("Producto creado:", productoDtoToSave);
@@ -33,7 +42,7 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<ProductDto>>getAllBookings() {
+    public ResponseEntity<List<ProductDto>>getALlProducts() {
         List<ProductDto> products = productService.getAllProductos();
         return ResponseEntity.ok(products);
     }
@@ -51,6 +60,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
+    @RolesAllowed("ADMIN")
     @PutMapping("{id}")
     public ResponseEntity<Object> updateProduct(@PathVariable String id, @RequestBody ProductDto productDto) {
         Map<String, Object> response = new HashMap<>();
@@ -65,6 +75,7 @@ public class ProductController {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
+    @RolesAllowed("ADMIN")
     @DeleteMapping("{id}")
     public ResponseEntity<Object> deleteProduct(@PathVariable String id) {
         Map<String, Object> response = new HashMap<>();
