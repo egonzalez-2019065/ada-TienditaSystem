@@ -1,5 +1,6 @@
 package com.alexandergonzalez.miTienditaSystem.dto;
 
+import com.alexandergonzalez.miTienditaSystem.util.Role;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,5 +28,12 @@ public class UserDto {
         this.username = username;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+    }
+
+    public UserDto(String name, String lastname, String username, String password) {
+        this.name = name;
+        this.lastname = lastname;
+        this.username = username;
+        this.password = password;
     }
 }
