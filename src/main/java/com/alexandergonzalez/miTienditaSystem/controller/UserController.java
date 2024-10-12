@@ -1,7 +1,9 @@
 package com.alexandergonzalez.miTienditaSystem.controller;
 
+import com.alexandergonzalez.miTienditaSystem.dto.RoleDto;
 import com.alexandergonzalez.miTienditaSystem.dto.UserDto;
 import com.alexandergonzalez.miTienditaSystem.entity.User;
+import com.alexandergonzalez.miTienditaSystem.repository.AuthRepository;
 import com.alexandergonzalez.miTienditaSystem.service.UserService;
 import com.alexandergonzalez.miTienditaSystem.util.Role;
 import jakarta.annotation.security.RolesAllowed;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
@@ -23,9 +26,20 @@ public class UserController {
 
     private final UserService userService;
 
+
+
     @Autowired
     public UserController(UserService userService) {
         this.userService = userService;
+        loadSampleUsers();
+    }
+
+    public void loadSampleUsers() {
+        UserDto found = userService.findByUsername("admin");
+        if(found == null) {
+            UserDto userAdmin = new UserDto("admin", "admin", "admin", "admin");
+            userService.saveUser(userAdmin);
+        }
     }
 
     // Endpoint para poder crear un nuevo usuario
@@ -73,6 +87,27 @@ public class UserController {
                 response.put("message:","NO puedes actualizar otro usuario que no sea el tuyo");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
+        }
+        response.put("message", "El usuario que está buscando aún no existe");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
+    @RolesAllowed("ADMIN")
+    @PutMapping("/role/{id}")
+    public ResponseEntity<Object> updateRole(@PathVariable String id, @RequestBody RoleDto newRole) {
+        Map<String, Object> response = new HashMap<>();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentPrincipalName = authentication.getName();
+        UserDto userFound = userService.findUserById(id);
+        if(userFound != null){
+            Boolean roleUpdated = userService.updateRole(id, newRole, currentPrincipalName);
+            if(roleUpdated){
+                response.put("message:", "Role actualizado correctamente");
+                return ResponseEntity.status(HttpStatus.OK).body(response);
+            }
+            response.put("message:","Role no actualizado");
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
         response.put("message", "El usuario que está buscando aún no existe");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);

@@ -1,5 +1,6 @@
 package com.alexandergonzalez.miTienditaSystem.service;
 
+import com.alexandergonzalez.miTienditaSystem.dto.RoleDto;
 import com.alexandergonzalez.miTienditaSystem.dto.UserDto;
 import com.alexandergonzalez.miTienditaSystem.entity.User;
 import com.alexandergonzalez.miTienditaSystem.repository.UserRepository;
@@ -60,6 +61,19 @@ public class UserService {
         return null;
     }
 
+    // Declaración de un método que permite agregar un nuevo role
+    public Boolean updateRole(String id, RoleDto roleDto, String userLogged){
+        User userFound = userRepository.findById(id).orElse(null);
+        if(userFound != null){
+            System.out.println(roleDto.getRole());
+            userFound.setRole(roleDto.getRole());
+            userFound.setUpdatedAt(LocalDateTime.now());
+            userFound.setWhoUpdatedTo(userLogged);
+            userRepository.save(userFound);
+            return true;
+        }
+        return false;
+    }
 
     // Declaración de un método que devolverá la información de un solo usuario existente en la base de datos
     public UserDto findUserById(String id){
@@ -68,6 +82,14 @@ public class UserService {
                return this.toDto(userFound);
            }
            return null;
+    }
+
+    public UserDto findByUsername(String username){
+        User userFound = userRepository.findByUsername(username).orElse(null);
+        if(userFound != null){
+            return this.toDto(userFound);
+        }
+        return null;
     }
 
     // Declaración de un método que devolverá todos los usuarios existentes en la base de datos
