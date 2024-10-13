@@ -27,10 +27,19 @@ public class RegisterDto {
         this.createdAt = LocalDateTime.now();
     }
 
-    public RegisterDto(String id, String name, String lastname, String username) {
-        this.id = id;
+    public RegisterDto(String name, String lastname, String username, String password, Role role, LocalDateTime createdAt) {
         this.name = name;
         this.lastname = lastname;
         this.username = username;
+        this.password = password;
+        this.role = role;
+        this.createdAt = createdAt;
+    }
+
+    public RegisterDto(String name, String lastname, String username, String password) {
+        this.name = name;
+        this.lastname = lastname;
+        this.username = username;
+        this.password = password;
     }
 }

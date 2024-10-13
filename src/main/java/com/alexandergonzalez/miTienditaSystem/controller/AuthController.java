@@ -37,7 +37,7 @@ public class AuthController {
 
     @PutMapping("{id}")
     public ResponseEntity<Object> updatePassword(@PathVariable String id, @RequestBody PasswordDto passwordDto) {
-        Map<String, Object> response = new HashMap<>();
+        Map<String, String> response = new HashMap<>();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
@@ -46,19 +46,17 @@ public class AuthController {
             if(currentPrincipalName.equals(userFound.getUsername())){
                 Boolean updatedUser = this.authService.updatePasword(id, passwordDto);
                 if(updatedUser){
-                    response.put("message:", "Contraseña actualizada correctamente");
+                    response.put("message", "Contraseña actualizada correctamente");
                     return ResponseEntity.status(HttpStatus.OK).body(response);
                 }
-                response.put("message:","Las contraseñas no coinciden");
+                response.put("message","Las contraseñas no coinciden");
                 return ResponseEntity.status(HttpStatus.BAD_GATEWAY).body(response);
             }
-            response.put("message:","NO puedes actualizar otro usuario que no sea el tuyo");
+            response.put("message","NO puedes actualizar otro usuario que no sea el tuyo");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
         }
         response.put("message", "El usuario que está buscando aún no existe");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
-
-
 
 }

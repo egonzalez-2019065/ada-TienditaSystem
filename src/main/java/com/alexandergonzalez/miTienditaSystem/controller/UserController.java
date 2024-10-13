@@ -95,7 +95,7 @@ public class UserController {
     @RolesAllowed("ADMIN")
     @PutMapping("/role/{id}")
     public ResponseEntity<Object> updateRole(@PathVariable String id, @RequestBody RoleDto newRole) {
-        Map<String, Object> response = new HashMap<>();
+        Map<String, String> response = new HashMap<>();
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String currentPrincipalName = authentication.getName();
