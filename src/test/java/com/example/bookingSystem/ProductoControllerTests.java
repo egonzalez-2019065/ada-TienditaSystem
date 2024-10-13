@@ -15,8 +15,7 @@ import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
+
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -44,7 +43,7 @@ public class ProductoControllerTests {
         assertNotNull(response.getBody());
 
         Map<String, ProductDto> responseBody = (Map<String, ProductDto>) response.getBody();
-        ProductDto createdProduct = responseBody.get("Producto creado:");
+        ProductDto createdProduct = responseBody.get("Producto creado");
 
         // Verificar campo por campo
         assertNotNull(createdProduct); // Asegura que el producto creado no sea nulo
@@ -63,7 +62,7 @@ public class ProductoControllerTests {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         Map<String, ProductDto> responseBody = (Map<String, ProductDto>) response.getBody();
-        ProductDto productoResponse = responseBody.get("Producto encontrado:");
+        ProductDto productoResponse = responseBody.get("Producto encontrado");
         assertEquals("Test Product", productoResponse.getName());
     }
 
@@ -78,7 +77,7 @@ public class ProductoControllerTests {
         ResponseEntity<Object> response = productController.updateProduct(id, productoDto_update);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         Map<String, ProductDto> responseBody = (Map<String, ProductDto>) response.getBody();
-        ProductDto productoResponse = responseBody.get("Producto actualizado:");
+        ProductDto productoResponse = responseBody.get("Producto actualizado");
         assertEquals("Test updated", productoResponse.getName());
     }
 
@@ -93,7 +92,7 @@ public class ProductoControllerTests {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         Map<String, Object> responseBody = (Map<String, Object>) response.getBody();
-        String productoResponse = (String) responseBody.get("Producto eliminado:");
+        String productoResponse = (String) responseBody.get("Producto eliminado");
 
         assertEquals("Test deleted", productoResponse);
     }
@@ -107,7 +106,7 @@ public class ProductoControllerTests {
 
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
         Map<String, Object> responseBody = (Map<String, Object>) response.getBody();
-        String productoResponse = (String) responseBody.get("message:");
+        String productoResponse = (String) responseBody.get("message");
         assertEquals("El producto aún no existe", productoResponse);
     }
 

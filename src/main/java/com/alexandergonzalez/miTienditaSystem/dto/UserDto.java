@@ -36,4 +36,11 @@ public class UserDto {
         this.username = username;
         this.password = password;
     }
+
+    public UserDto(String name, String lastname, String username, LocalDateTime updatedAt) {
+        this.name = name;
+        this.lastname = lastname;
+        this.username = username;
+        this.updatedAt = updatedAt;
+    }
 }
