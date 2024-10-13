@@ -35,7 +35,7 @@ public class ProductController {
     public ResponseEntity<Object> createProduct(@RequestBody ProductDto productDto) {
         Map<String, Object> response = new HashMap<>();
         ProductDto productoDtoToSave = productService.saveProduct(productDto);
-        response.put("Producto creado:", productoDtoToSave);
+        response.put("Producto creado", productoDtoToSave);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
@@ -51,7 +51,7 @@ public class ProductController {
 
         ProductDto productFound = productService.getProductByID(id);
         if (productFound != null) {
-            response.put("Producto encontrado:", productFound);
+            response.put("Producto encontrado", productFound);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
         response.put("message", "El producto aún no existe");
@@ -66,7 +66,7 @@ public class ProductController {
         ProductDto product = productService.getProductByID(id);
         if (product != null) {
             ProductDto updatedProduct = productService.updateProducto(id, productDto);
-            response.put("Producto actualizado:", updatedProduct);
+            response.put("Producto actualizado", updatedProduct);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
         response.put("message", "El producto aún no existe");
@@ -81,10 +81,10 @@ public class ProductController {
         ProductDto product = productService.getProductByID(id);
         if (product != null) {
             ProductDto productDeleted = productService.deleteProduct(id);
-            response.put("Producto eliminado:", productDeleted.getName());
+            response.put("Producto eliminado", productDeleted.getName());
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-        response.put("message:", "El producto aún no existe");
+        response.put("message", "El producto aún no existe");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 }
