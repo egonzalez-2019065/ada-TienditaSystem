@@ -63,7 +63,7 @@ public class UserController {
         Map<String, Object> response = new HashMap<>();
         UserDto userFound = userService.findUserById(id);
         if(userFound != null){
-            response.put("Usuario encontrado:", userFound);
+            response.put("Usuario encontrado", userFound);
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
         response.put("message", "El usuario que está buscando aún no existe");
@@ -81,10 +81,10 @@ public class UserController {
         if(userFound != null){
             if(currentPrincipalName.equals(userFound.getUsername())){
                 UserDto updatedUser = userService.updateUser(id, userDto);
-                response.put("Usuario actualizado:", updatedUser);
+                response.put("Usuario actualizado", updatedUser);
                 return ResponseEntity.status(HttpStatus.OK).body(response);
             }else{
-                response.put("message:","NO puedes actualizar otro usuario que no sea el tuyo");
+                response.put("message","NO puedes actualizar otro usuario que no sea el tuyo");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
         }
@@ -103,10 +103,10 @@ public class UserController {
         if(userFound != null){
             Boolean roleUpdated = userService.updateRole(id, newRole, currentPrincipalName);
             if(roleUpdated){
-                response.put("message:", "Role actualizado correctamente");
+                response.put("message", "Role actualizado correctamente");
                 return ResponseEntity.status(HttpStatus.OK).body(response);
             }
-            response.put("message:","Role no actualizado");
+            response.put("message","Role no actualizado");
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
         }
         response.put("message", "El usuario que está buscando aún no existe");
@@ -123,11 +123,11 @@ public class UserController {
         UserDto userFound = userService.findUserById(id);
         if(userFound != null){
             if(currentPrincipalName.equals(userFound.getUsername())){
-                UserDto Userdeleted = userService.deleteUser(id);
-                response.put("Usuario eliminado:", Userdeleted.getUsername());
+                UserDto userDeleted = userService.deleteUser(id);
+                response.put("Usuario eliminado", userDeleted.getUsername());
                 return ResponseEntity.status(HttpStatus.OK).body(response);
             }else{
-                response.put("message:","NO puedes eliminar otro usuario que no sea el tuyo");
+                response.put("message","NO puedes eliminar otro usuario que no sea el tuyo");
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
         }
