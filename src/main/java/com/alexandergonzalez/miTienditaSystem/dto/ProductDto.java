@@ -14,4 +14,9 @@ public class ProductDto {
     private double price;
     private String details;
 
+    public ProductDto(String name, double price, String details) {
+        this.name = name;
+        this.price = price;
+        this.details = details;
+    }
 }

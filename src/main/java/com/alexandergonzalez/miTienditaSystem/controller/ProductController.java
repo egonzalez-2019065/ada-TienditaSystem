@@ -33,8 +33,6 @@ public class ProductController {
     @RolesAllowed("ADMIN")
     @PostMapping
     public ResponseEntity<Object> createProduct(@RequestBody ProductDto productDto) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentPrincipalName = authentication.getName();
         Map<String, Object> response = new HashMap<>();
         ProductDto productoDtoToSave = productService.saveProduct(productDto);
         response.put("Producto creado:", productoDtoToSave);
@@ -86,7 +84,7 @@ public class ProductController {
             response.put("Producto eliminado:", productDeleted.getName());
             return ResponseEntity.status(HttpStatus.OK).body(response);
         }
-        response.put("message", "El producto aún no existe");
+        response.put("message:", "El producto aún no existe");
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 }
