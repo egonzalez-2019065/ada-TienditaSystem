@@ -1,5 +1,5 @@
-# Utiliza una imagen base con Maven y OpenJDK 17
-FROM maven:3.9.5-openjdk-17-slim AS build
+# Utiliza una imagen base con Maven
+FROM maven:3.9.5 AS build
 
 # Establece el directorio de trabajo
 WORKDIR /app
@@ -12,7 +12,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Cambia a una imagen más ligera de OpenJDK 17 para la ejecución
-FROM openjdk:17-jdk-slim
+FROM openjdk:17-slim
 
 # Establece el directorio de trabajo
 WORKDIR /app
